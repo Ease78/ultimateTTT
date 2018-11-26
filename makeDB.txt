@@ -1,0 +1,15 @@
+CREATE DATABASE finalproject;
+USE finalproject;
+CREATE TABLE users (
+	id int(16) NOT NULL AUTO_INCREMENT,
+	username VARCHAR(32) NOT NULL,
+	password VARCHAR(48) NOT NULL,
+	PRIMARY KEY(id)
+);
+CREATE TABLE games (
+	id int(16) NOT NULL AUTO_INCREMENT,
+	user_id int(16) NOT NULL,
+	game_result char(1) NOT NULL,
+	time_elapsed int(16) NOT NULL,
+	PRIMARY KEY(id)
+);
