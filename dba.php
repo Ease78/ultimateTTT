@@ -43,9 +43,20 @@ class DBAdapter {
 		$statement->execute();
 		$account = $statement->fetchAll(PDO::FETCH_ASSOC);
 		if (count($account) == 0)
-			return false;
+			return [false, -1];
 		if (!password_verify($password, $account['password']))
+			return [false, -1];
+		return [true, $account['id']];
+	}
+	
+	public function changePassword($username, $oldPass, $newPass) {
+		$valid = loginAccount($username, $oldPass);
+		if (!$valid)
 			return false;
+		$statement = $this->DB->prepare('UPDATE users SET password = :newPass WHERE username = :username;');
+		$statement->bindParam('username', htmlspecialchars($username));
+		$statement->bindParam('newPass', htmlspecialchars($newPass));
+		$statement->execute();
 		return true;
 	}
 	

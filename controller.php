@@ -4,6 +4,11 @@ require_once "./dba.php";
 session_start();
 
 
+/* for copy and pasting
+	if (!isset($json['']))
+		error_response('missing argument', '');
+*/
+
 
 //handles errors like no input or invalid input
 function error_response($err, $extra=null) {
@@ -21,6 +26,7 @@ if (!is_array($json))
 if (!isset($json['request']))
 	error_response('no request name');
 
+
 $dba = new DBAdapter()
 //for getting current user:
 //input: {request}
@@ -30,9 +36,9 @@ $dba = new DBAdapter()
 if ($json['request'] == 'currentUser') {
 	//gets current user, if there is one
 	if (isset($_SESSION['currentUser']))
-		echo '{exists: true, username: \''.$_SESSION['currentUser'].'\'}';
+		echo "{exists: true, username: '".$_SESSION['currentUser']."'}";
 	else
-		echo '{exists: false, username: null}';
+		echo "{exists: false, username: ''}";
 } else
 //for registering user:
 //input: {request, username, password}
@@ -57,8 +63,9 @@ if ($json['request'] == 'register') {
 //input: {request, username, password}
 //  username: string, the user's username
 //  password: string, the user's password
-//output: {success}
+//output: {success, reason}
 //  success: boolean, true if the user was logged in, false otherwise
+//  reason: string, the reason successis false or empty is success is true
 if ($json['request'] == 'login') {
 	//check required variables
 	if (!isset($json['username']))
@@ -68,17 +75,17 @@ if ($json['request'] == 'login') {
 	
 	//attempt login
 	if (isset($_SESSION['currentUser']))
-		echo '{success: false, reason: \'user "'.$_SESSION['currentUser'].'" already logged in\'}'
+		echo "{success: false, reason: \'user '".$_SESSION['currentUser']."' already logged in\'}";
 	if ($dba.loginAccount($json['username'], $json['password'])) {
 		$_SESSION['currentUser'] = $json['username']; //set session variable on successful login
-		echo '{success: true, reason: \'\'}';
+		echo "{success: true, reason: ''}";
 	} else
-		echo '{success: false, reason: \'invalid username or password\'}';
+		echo "{success: false, reason: 'invalid username or password'}";
 } else
 //for recording game results:
 //input: {request, win, timeElapsed?}
 //
-//output: {}
+//output: none
 if ($json['request'] == 'game end') {
 	//record game data
 	
@@ -93,12 +100,33 @@ if ($json['request'] == 'player stats') {
 } else
 //for logging the user out
 //input: {request}
-//output: {}
+//output: {success}
+//  success: boolean, false iff no user was logged in
 if ($json['request'] == 'logout') {
 	//no database access needed, just unsetting the currentUser variable in the session
-	if (isset($_SESSION['currentUser']))
-		unset($_SESSION['currentUser']);
-	echo '';
+	if (isset($_SESSION['currentUser'])) {
+		unset($_SESSION['currentUser']); //maybe use 'session_destroy();'?
+		echo '{success: true}';
+	} else
+		echo '{success: false}';
+} else
+//for changing a user's password
+//input: {request, oldPassword, newPassword}
+//  ...
+//output: {success, reason}
+//  success: boolean, true if user's password was changed, false otherwise
+//  reason: string, reason success is false, empty if success is true
+if ($json['request'] == 'change password') {
+	if (!isset($json['oldPassword']))
+		error_response('missing argument', 'oldPassword');
+	if (!isset($json['newPassword']))
+		error_response('missing argument', 'newPassword');
+	if (!isset($_SESSION['currentUser']))
+		echo "{success: false, reason: 'no user logged in'}";
+	if ($dba.changePassword($_SESSION['username'], $json['oldPassword']), $json['newPassword'])
+		echo "{success: true, reason: ''}";
+	else
+		echo "{success: false, reason: 'invalid password'}";
 } else
 	error_response('invalid request', $json['request']); //when the request isn't recognised
 
