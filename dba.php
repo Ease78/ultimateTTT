@@ -60,11 +60,11 @@ class DBAdapter {
 		return true;
 	}
 	
-	public function saveGameData($user, $data) {
+	public function saveGameData($userId, $data) {
 		
 	}
 	
-	public function getGameData($user) {
+	public function getGameData($userId) {
 		
 	}
 	
