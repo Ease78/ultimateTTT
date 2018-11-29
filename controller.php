@@ -56,7 +56,7 @@ if ($json['request'] == 'register') {
 	
 	//attempt registering user
 	if (isset($_SESSION['currentUser']))
-		echo "{'success': false, 'reason': \'user '".$_SESSION['currentUser']."' already logged in\'}";
+		echo "{'success': false, 'reason': 'user '".$_SESSION['currentUser']."' already logged in'}";
 	if ($dba.registerAccount($json['username'], $json['password']))
 		echo "{'success': true}";
 	else
@@ -78,7 +78,7 @@ if ($json['request'] == 'login') {
 	
 	//attempt login
 	if (isset($_SESSION['currentUser']))
-		echo "{'success': false, 'reason': \'user '".$_SESSION['currentUser']."' already logged in\'}";
+		echo "{'success': false, 'reason': 'user '".$_SESSION['currentUser']."' already logged in'}";
 	$validLogin = $dba.loginAccount($json['username'], $json['password']);
 	if ($validLogin[0]) {
 		$_SESSION['currentUser'] = $json['username']; //set session variable on successful login
