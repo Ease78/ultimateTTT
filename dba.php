@@ -55,7 +55,7 @@ class DBAdapter {
 			return false;
 		$statement = $this->DB->prepare('UPDATE users SET password = :newPass WHERE username = :username;');
 		$statement->bindParam('username', htmlspecialchars($username));
-		$statement->bindParam('newPass', htmlspecialchars($newPass));
+		$statement->bindParam('newPass', password_hash(htmlspecialchars($newPass), PASSWORD_DEFAULT));
 		$statement->execute();
 		return true;
 	}
