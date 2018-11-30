@@ -1,3 +1,4 @@
+//value to be returned if ajax.status != 200
 var connErr = 'connection error';
 
 //general request method
@@ -27,7 +28,11 @@ function createResponseObj() {
 	return { response: {}, error: false };
 }
 
-//specific request functions
+//specific request functions ------------------
+
+//login function
+//in: username, password
+//out: array: (bool) true if login passed, (string) reason login failed
 function login(user, pass) {
 	var rsp = createResponseObj();
 	sendRequest({ request: 'login', username: user, password: pass }, rsp);
@@ -36,6 +41,9 @@ function login(user, pass) {
 	return [rsp.response.success, rsp.response.reason];
 }
 
+//registering function (create new user)
+//in: username, password
+//out: array: (bool) true if account is created, (string) reason account creation failed
 function register(user, pass) {
 	var rsp = createResponseObj();
 	sendRequest({ request: 'register', username: user, password: pass }, rsp);
@@ -44,6 +52,9 @@ function register(user, pass) {
 	return [rsp.response.success, rsp.response.reason];
 }
 
+//logout function
+//in: none
+//out: (bool) true if user is logged out
 function logout() {
 	var rsp = createResponseObj();
 	sendRequest({ request: 'logout' }, rsp);
@@ -52,6 +63,9 @@ function logout() {
 	return rsp.response.success;
 }
 
+//change user's password function
+//in: old password (for user validation), new password
+//out: array: (bool) true if user's password was changed, (string) reason password was not changed
 function changePass(oldPass, newPass) {
 	var rsp = createResponseObj();
 	sendRequest({ request: 'change password', oldPassword: oldPass, newPassword: newPass }, rsp);
@@ -59,3 +73,18 @@ function changePass(oldPass, newPass) {
 		return connErr;
 	return [rsp.response.success, rsp.response.reason];
 }
+
+//get current user (from session)
+//in: none
+//out: array: (bool) true is there is a user in the session, (string) the username (if there is one)
+function currentUser() {
+	var rsp = createResponseObj();
+	sendRequest({ request: 'current user' }, rsp);
+	if (rsp.error)
+		return connErr;
+	return [rsp.exists, rsp.username];
+}
+
+//todo create push game results function
+
+//todo create get player stats function
