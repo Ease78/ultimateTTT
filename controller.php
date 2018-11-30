@@ -10,10 +10,15 @@ session_start();
 */
 
 $REASON = array(
+	//login function returned false for either incorrect username or password
 	'bad login' => 'invalid username or password',
-	'bad register' => 'username already taken',
+	//register returned false because the username was taken
+	'bad register' => 'username already taken', 
+	//logging in or registering when already signed in
 	'logged in' => "user '".(isset($_SESSION['currentUser'])?$_SESSION['currentUser']:'')."' already logged in",
+	//logging out but no one is signed in
 	'logged out' => 'no user logged in',
+	//if old password is wrong when changing password
 	'bad password' => 'invalid password'
 );
 
@@ -41,7 +46,7 @@ $dba = new DBAdapter()
 //output: {exists, username}
 //  exists: boolean, true is there is a current user, false otherwise
 //  username: string, the current user's username or null if there is no current user
-if ($json['request'] == 'currentUser') {
+if ($json['request'] == 'current user') {
 	//gets current user, if there is one
 	if (isset($_SESSION['currentUser']))
 		echo json_encode(array('exists' => true, 'username' => $_SESSION['username']));
