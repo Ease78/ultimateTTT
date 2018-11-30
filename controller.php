@@ -12,7 +12,7 @@ session_start();
 $REASON = array(
 	'bad login' => 'invalid username or password',
 	'bad register' => 'username already taken',
-	'logged in' => "user '".$_SESSION['currentUser']."' already logged in",
+	'logged in' => "user '".(isset($_SESSION['currentUser'])?$_SESSION['currentUser']:'')."' already logged in",
 	'logged out' => 'no user logged in',
 	'bad password' => 'invalid password'
 );
