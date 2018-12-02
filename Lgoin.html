@@ -32,9 +32,15 @@
               </label>
             </div>
             <br/>
+
             <center>
               <div class='row'>
-                <button style="margin-left:65px;"  type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Login</button>
+                      <input type="reset" id="reset" onclick="resetInput()" class="btn-flat grey-text waves-effect">
+              
+               <p class="margin medium-small"><a href="./tictactoe.html">Play as a guest</a></p>
+               <button style="margin-left:65px;" onclick="registerUserCredntials()" type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Register Now!</button>
+               <br>
+                <button style="margin-left:65px;" onclick="sendUserCredntials()" type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Login</button>
               </div>
             </center>
      
@@ -44,6 +50,31 @@
       </main>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+ 
+<script>
+function resetInput(){
+    var passVar = document.getElementById("password");
+    var userVar = document.getElementById("email");
+    passVar.innerHTML="";
+    userVar.innerHTML="";
 
+  
+}
+</script>
+
+  <script type="text/javascript" src="./ajaxScript.js">
+    var passVar = document.getElementById("password");
+    var userVar = document.getElementById("email");
+
+   
+
+    function sendUserCredntials(){
+    		ajaxScript.login(userVar.value, passVar.value);
+    	}
+    	
+    function registerUserCredntials(){
+    		ajaxScript.register(userVar.value, passVar.value);
+    	}
+    </script>
 	</div>
 </div>
