@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="UltimateTTT.css"/>
+		<script src="UltimateTTT.js"></script> <!-- For playing the game -->
+		<script src="UltimateTicTacToePlayerAI.js"></script> <!-- For AI players -->
+		<title>Ultimate Tic Tac Toe</title>
+	</head>
+	<body>
+	   <h1 id="pageHeader">Ultimate Tic Tac Toe</h1>
+	   <h3 id="pageHeader">You play in a sub-board corresponding to the opponent's move, and vice versa.
+<br>
+When you win a sub-board (under normal tic-tac-toe rules) that sub-board becomes your symbol for the purposes of the meta-board. You have to win on the meta-board (again, normal rules) to win.
+</h3>
+
+	   <div id="board" width="600" height="600"></div>
+	   <script>drawBoard("board");startGame();</script>
+	</body>
+</html>
