@@ -40,7 +40,7 @@ if (!isset($json['request']))
 	error_response('no request name');
 
 
-$dba = new DBAdapter()
+$dba = new DBAdapter();
 //for getting current user:
 //input: {request}
 //output: {exists, username}
@@ -144,7 +144,7 @@ if ($json['request'] == 'change password') {
 		echo json_encode(array('success' => false, 'reason' => $REASON['logged out']));
 	
 	//attempt password change
-	if ($dba.changePassword($_SESSION['username'], $json['oldPassword']), $json['newPassword'])
+	if ($dba.changePassword($_SESSION['username'], $json['oldPassword'], $json['newPassword']))
 		echo json_encode(array('success' => true, 'reason' => ''));
 	else
 		echo json_encode(array('success' => false, 'reason' => $REASON['bad password']));
