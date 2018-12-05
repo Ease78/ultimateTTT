@@ -72,7 +72,7 @@ if ($json['request'] == 'register') {
 	//attempt registering user
 	if (isset($_SESSION['currentUser']))
 		echo json_encode(array('success' => false, 'reason' => $REASON['logged in']));
-	if ($dba->registerAccount($json['username'], $json['password']))
+	else if ($dba->registerAccount($json['username'], $json['password']))
 		echo json_encode(array('success' => true, 'reason' => ''));
 	else
 		echo json_encode(array('success' => false, 'reason' => $REASON['bad register']));
@@ -94,13 +94,15 @@ if ($json['request'] == 'login') {
 	//attempt login
 	if (isset($_SESSION['currentUser']))
 		echo json_encode(array('success' => false, 'reason' => $REASON['logged in']));
-	$validLogin = $dba->loginAccount($json['username'], $json['password']);
-	if ($validLogin[0]) {
-		$_SESSION['currentUser'] = $json['username']; //set session variable on successful login
-		$_SESSION['currentUserId'] = $validLogin[1];
-		echo json_encode(array('success' => true, 'reason' => ''));
-	} else
-		echo json_encode(array('success' => false, 'reason' => $REASON['bad login']));
+	else {
+		$validLogin = $dba->loginAccount($json['username'], $json['password']);
+		if ($validLogin[0]) {
+			$_SESSION['currentUser'] = $json['username']; //set session variable on successful login
+			$_SESSION['currentUserId'] = $validLogin[1];
+			echo json_encode(array('success' => true, 'reason' => ''));
+		} else
+			echo json_encode(array('success' => false, 'reason' => $REASON['bad login']));
+	}
 } else
 //for recording game results:
 //input: {request, win, timeElapsed?}
@@ -146,7 +148,7 @@ if ($json['request'] == 'change password') {
 		echo json_encode(array('success' => false, 'reason' => $REASON['logged out']));
 	
 	//attempt password change
-	if ($dba->changePassword($_SESSION['username'], $json['oldPassword'], $json['newPassword']))
+	else if ($dba->changePassword($_SESSION['username'], $json['oldPassword'], $json['newPassword']))
 		echo json_encode(array('success' => true, 'reason' => ''));
 	else
 		echo json_encode(array('success' => false, 'reason' => $REASON['bad password']));

@@ -27,35 +27,30 @@ its only parameter is the json returned by the request.
 //login function
 //in: username, password
 function login(user, pass, callback) {
-	var rsp = createResponseObj();
 	sendRequest({ request: 'login', username: user, password: pass }, callback);
 }
 
 //registering function (create new user)
 //in: username, password
 function register(user, pass, callback) {
-	var rsp = createResponseObj();
 	sendRequest({ request: 'register', username: user, password: pass }, callback);
 }
 
 //logout function
 //in: none
 function logout(callback) {
-	var rsp = createResponseObj();
 	sendRequest({ request: 'logout' }, callback);
 }
 
 //change user's password function
 //in: old password (for user validation), new password
 function changePass(oldPass, newPass, callback) {
-	var rsp = createResponseObj();
 	sendRequest({ request: 'change password', oldPassword: oldPass, newPassword: newPass }, callback);
 }
 
 //get current user (from session)
 //in: none
 function currentUser(callback) {
-	var rsp = createResponseObj();
 	sendRequest({ request: 'current user' }, callback);
 }
 

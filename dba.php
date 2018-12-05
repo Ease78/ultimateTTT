@@ -51,11 +51,15 @@ class DBAdapter {
 	
 	public function changePassword($username, $oldPass, $newPass) {
 		$valid = loginAccount($username, $oldPass);
+		$username = htmlspecialchars($username);
+		$password = htmlspecialchars($oldPass);
+		$password = htmlspecialchars($newPass);
 		if (!$valid)
 			return false;
 		$statement = $this->DB->prepare('UPDATE users SET password = :newPass WHERE username = :username;');
-		$statement->bindParam('username', htmlspecialchars($username));
-		$statement->bindParam('newPass', password_hash(htmlspecialchars($newPass), PASSWORD_DEFAULT));
+		$statement->bindParam('username', $username);
+		$hashedPass = password_hash($newPass, PASSWORD_DEFAULT);
+		$statement->bindParam('newPass', $hashedPass);
 		$statement->execute();
 		return true;
 	}

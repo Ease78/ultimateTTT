@@ -38,9 +38,11 @@
                       <input type="reset" id="reset" onclick="resetInput()" class="btn-flat grey-text waves-effect">
               
                <p class="margin medium-small"><a href="./tictactoe.html">Play as a guest</a></p>
-               <button style="margin-left:65px;" onclick="registerUserCredntials()" type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Register Now!</button>
+               <button style="margin-left:65px;" onclick="registerUserCredntials()" type='submit' name='btn_register' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Register Now!</button>
                <br>
                 <button style="margin-left:65px;" onclick="sendUserCredntials()" type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Login</button>
+				<br>
+                <button style="margin-left:65px;" onclick="logoutAccount()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Logout</button>
               </div>
             </center>
      
@@ -55,28 +57,38 @@
 function resetInput(){
     var passVar = document.getElementById("password");
     var userVar = document.getElementById("email");
-    passVar.innerHTML="";
-    userVar.innerHTML="";
+    passVar.value="";
+    userVar.value="";
 
   
 }
 </script>
 
-  <script type="text/javascript" src="./ajaxScript.js">
+  <script type="text/javascript" src="./ajaxScript.js"></script>
+  <script>
     var passVar = document.getElementById("password");
     var userVar = document.getElementById("email");
 
    
 
     function sendUserCredntials(){
-    		ajaxScript.login(userVar.value, passVar.value, function (response) {
-				//put return dependent code here
+    		login(userVar.value, passVar.value, function (response) {
+				console.log(response);
+				//add stuff here
 			});
     	}
     	
     function registerUserCredntials(){
-    		ajaxScript.register(userVar.value, passVar.value, function (response) {
-				//put return dependent code here
+    		register(userVar.value, passVar.value, function (response) {
+				console.log(response);
+				//add stuff here
+			});
+    	}
+	
+	function logoutAccount(){
+    		logout(function (response) {
+				console.log(response);
+				//add stuff here
 			});
     	}
     </script>
