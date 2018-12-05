@@ -1,3 +1,8 @@
+<link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -7,11 +12,16 @@
 		<title>Ultimate Tic Tac Toe</title>
 	</head>
 	<body>
-	   <h1 id="pageHeader">Ultimate Tic Tac Toe</h1>
-	   <h3 id="pageHeader">You play in a sub-board corresponding to the opponent's move, and vice versa.
+	
+	<br>
+	
+	<button style="margin-left:65px;" onclick="logoutAccount()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Logout</button>
+	
+	   <h3 id="pageHeader">Ultimate Tic Tac Toe</h3>
+	   <h5 id="pageHeader">You play in a sub-board corresponding to the opponent's move, and vice versa.
 <br>
 When you win a sub-board (under normal tic-tac-toe rules) that sub-board becomes your symbol for the purposes of the meta-board. You have to win on the meta-board (again, normal rules) to win.
-</h3>
+</h5>
 
 	   <div id="board" width="600" height="600"></div>
 	   <script>drawBoard("board");startGame();</script>
