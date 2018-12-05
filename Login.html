@@ -28,7 +28,7 @@
                 <label for='password'>Password</label>
               </div>
               <label style='float: right;'>
-              <a><b style="color: #F5F5F5;">Forgot Password?</b></a>
+              <!--<a><b style="color: #F5F5F5;">Forgot Password?</b></a>-->
               </label>
             </div>
             <br/>
@@ -37,12 +37,12 @@
               <div class='row'>
                       <input type="reset" id="reset" onclick="resetInput()" class="btn-flat grey-text waves-effect">
               
-               <p class="margin medium-small"><a href="./tictactoe.html">Play as a guest</a></p>
-               <button style="margin-left:65px;" onclick="registerUserCredntials()" type='submit' name='btn_register' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Register Now!</button>
-               <br>
+               <!--<p class="margin medium-small"><a href="./tictactoe.html">Play as a guest</a></p>-->
                 <button style="margin-left:65px;" onclick="sendUserCredntials()" type='submit' name='btn_login' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Login</button>
 				<br>
-                <button style="margin-left:65px;" onclick="logoutAccount()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Logout</button>
+               <button style="margin-left:65px;" onclick="registerUserCredntials()" type='submit' name='btn_register' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Register Now!</button>
+               <br>
+                <!--<button style="margin-left:65px;" onclick="logoutAccount()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Logout</button>-->
               </div>
             </center>
      
@@ -69,28 +69,37 @@ function resetInput(){
     var passVar = document.getElementById("password");
     var userVar = document.getElementById("email");
 
-   
+	currentUser(function(response) {if (JSON.parse(response).exists) window.location = "./GameSelector.html";});
 
     function sendUserCredntials(){
     		login(userVar.value, passVar.value, function (response) {
-				console.log(response);
-				//add stuff here
+				//console.log(response);
+				response = JSON.parse(response);
+				if(response.success)
+					window.location = "./GameSelector.html";
+				else
+					alert(response.reason);
 			});
     	}
     	
     function registerUserCredntials(){
     		register(userVar.value, passVar.value, function (response) {
-				console.log(response);
-				//add stuff here
+				//console.log(response);
+				response = JSON.parse(response);
+				if(response.success)
+					sendUserCredntials();
+				else
+					alert(response.reason);
 			});
     	}
-	
+	/*
 	function logoutAccount(){
     		logout(function (response) {
 				console.log(response);
 				//add stuff here
 			});
     	}
+	*/
     </script>
 	</div>
 </div>

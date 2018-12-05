@@ -507,23 +507,37 @@ function finishGame(final)
     textAttrs["x"] = width/2;
     textAttrs["y"] = height/2 - 30;
 
-    //Add different text depending on final
-    if(final == 1)
-        addTextEltToSVG(svg, textAttrs, "Red Wins!")
-    else if(final == 2)
-        addTextEltToSVG(svg, textAttrs, "Blue Wins!")
-    else
-        addTextEltToSVG(svg, textAttrs, "It's a Tie!")
-
+    //Add different text depending on final //set ajax result variable
+	var gameResult = "";
+    if(final == 1) {
+        addTextEltToSVG(svg, textAttrs, "Red Wins!");
+		gameResult = "w"; //red is player 1
+	} else if(final == 2) {
+        addTextEltToSVG(svg, textAttrs, "Blue Wins!");
+		gameResult = "l";
+    } else {
+        addTextEltToSVG(svg, textAttrs, "It's a Tie!");
+		gameResult = "t";
+	}
+	
+	//ajax to send game result to server
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST", "controller.php", true);
+	ajax.setRequestHeader("Content-type", "application/json");
+	ajax.send(JSON.stringify({request: "push stats", result: gameResult, gameType: "u", opponent: "h"}));
+	ajax.onreadystatechange = function() {
+		if (ajax.readyState == 4 && ajax.status == 200)
+			console.log("data pushed: " + JSON.parse(ajax.responseText).success);
+	}
+	
     //Add refresh message
     textAttrs["style"] = "text-anchor: middle; font-family: sans-serif; font-size:100%";
     textAttrs["x"] = width/2;
     textAttrs["y"] = height/2 + 30;
 
     addTextEltToSVG(svg, textAttrs, "Hit refresh to play again!");
-
-
-
+	
+	
 }
 
 //Adds element specified by name with attributes in attrs to svg

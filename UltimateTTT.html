@@ -24,6 +24,17 @@ When you win a sub-board (under normal tic-tac-toe rules) that sub-board becomes
 </h5>
 
 	   <div id="board" width="600" height="600"></div>
+	   <script type="text/javascript" src="./ajaxScript.js"></script>
+		<script>
+		currentUser(function(response) {if (!JSON.parse(response).exists) window.location = "./Login.html";});
+		
+	   function logoutAccount() {
+    		logout(function (response) {
+				//console.log(response);
+				window.location = "./Login.html";
+			});
+		}
+	   </script>
 	   <script>drawBoard("board");startGame();</script>
 	</body>
 </html>

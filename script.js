@@ -75,11 +75,27 @@ function gameOver(gameWon){
     cells[i].removeEventListener('click', turnClick, false);
   }
   declareWinner(gameWon.player === huPlayer ? "You win!" : "You lose");
+  
 }
 
 function declareWinner(who) {
-  document.querySelector(".endgame").style.display = "block";
-  document.querySelector(".endgame .text").innerText = who;
+	document.querySelector(".endgame").style.display = "block";
+	document.querySelector(".endgame .text").innerText = who;
+	var gameResult = "";
+	if (who == "Tie game")
+		gameResult = "t";
+	else
+		gameResult = "l";
+	
+	//ajax to send game result to server
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST", "controller.php", true);
+	ajax.setRequestHeader("Content-type", "application/json");
+	ajax.send(JSON.stringify({request: "push stats", result: gameResult, gameType: "n", opponent: "c"}));
+	ajax.onreadystatechange = function() {
+		if (ajax.readyState == 4 && ajax.status == 200)
+			console.log("data pushed: " + JSON.parse(ajax.responseText).success);
+	}
 }
 function emptySquares() {
   return origBoard.filter((elm, i) => i===elm);

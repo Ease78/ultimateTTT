@@ -54,6 +54,8 @@ function currentUser(callback) {
 	sendRequest({ request: 'current user' }, callback);
 }
 
-//todo create push game results function
+//todo create push game results function //not needed
 
-//todo create get player stats function
+function getStats(callback) {
+	sendRequest({ request: 'get stats' }, callback);
+}

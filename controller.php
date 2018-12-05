@@ -11,15 +11,15 @@ session_start();
 
 $REASON = array(
 	//login function returned false for either incorrect username or password
-	'bad login' => 'invalid username or password',
+	'bad login' => 'Invalid username or password',
 	//register returned false because the username was taken
-	'bad register' => 'username already taken', 
+	'bad register' => 'Username already taken', 
 	//logging in or registering when already signed in
-	'logged in' => "user '".(isset($_SESSION['currentUser'])?$_SESSION['currentUser']:'')."' already logged in",
+	'logged in' => "User '".(isset($_SESSION['currentUser'])?$_SESSION['currentUser']:'')."' already logged in",
 	//logging out but no one is signed in
-	'logged out' => 'no user logged in',
+	'logged out' => 'No user logged in',
 	//if old password is wrong when changing password
-	'bad password' => 'invalid password'
+	'bad password' => 'Invalid password'
 );
 
 
@@ -51,7 +51,7 @@ $dba = new DBAdapter();
 if ($json['request'] == 'current user') {
 	//gets current user, if there is one
 	if (isset($_SESSION['currentUser']))
-		echo json_encode(array('exists' => true, 'username' => $_SESSION['username']));
+		echo json_encode(array('exists' => true, 'username' => $_SESSION['currentUser']));
 	else
 		echo json_encode(array('exists' => false, 'username' => ''));
 } else
@@ -105,20 +105,33 @@ if ($json['request'] == 'login') {
 	}
 } else
 //for recording game results:
-//input: {request, win, timeElapsed?}
+//input: {request, result, gameType, opponent}
 //
-//output: none
+//output: success: false if user DNE
 if ($json['request'] == 'push stats') {
-	//record game data
+	if (!isset($json['result']))
+		error_response('missing argument', 'result');
+	if (!isset($json['gameType']))
+		error_response('missing argument', 'gameType');
+	if (!isset($json['opponent']))
+		error_response('missing argument', 'opponent');
+	if (!isset($_SESSION['currentUser']))
+		echo json_encode(array('success' => false));
 	
+	else if ($dba->saveGameData($_SESSION['currentUser'], $json['result'], $json['gameType'], $json['opponent']))
+		echo json_encode(array('success' => true)); 
+	else
+		echo json_encode(array('success' => false));
 } else
 //for getting player statistics:
 //input: {request}
 //output: {...}
 //
 if ($json['request'] == 'get stats') {
-	//get player statistics
-	
+	if (!isset($_SESSION['currentUser']))
+		echo json_encode(array('success' => false));
+	else
+		echo json_encode(array_merge(array('success' => true), $dba->getGameData($_SESSION['currentUser'])));
 } else
 //for logging the user out
 //input: {request}

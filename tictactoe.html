@@ -10,7 +10,8 @@
 </head>
 
 <body>
-
+	<p><button onClick="startGame()">Replay</button><br/>
+	<button onClick="logoutAccount()">Logout</button></p>
 	<table>
 		<tr>
 			<td class="cell" id="0"></td>
@@ -36,8 +37,19 @@
       <button onClick="selectSym('X')">X</button>
       <button onClick="selectSym('O')">O</button>
     </div>
-	<button onClick="startGame()">Replay</button>
+	
 
   <script src="script.js"></script>
+  <script src="ajaxScript.js"></script>
+  <script>
+	currentUser(function(response) {if (!JSON.parse(response).exists) window.location = "./Login.html";});
+		
+   function logoutAccount() {
+		logout(function (response) {
+			//console.log(response);
+			window.location = "./Login.html";
+		});
+	}
+  </script>
 </body>
 </html>

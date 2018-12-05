@@ -64,12 +64,55 @@ class DBAdapter {
 		return true;
 	}
 	
-	public function saveGameData($userId, $data) {
-		
+	public function saveGameData($username, $result, $type, $opponent) {
+		$username = htmlspecialchars($username);
+		$result = htmlspecialchars($result);
+		$opponent = htmlspecialchars($opponent);
+		$type = htmlspecialchars($type);
+		$statement = $this->DB->prepare('SELECT id FROM users WHERE username = :user');
+		$statement->bindParam('user', $username);
+		$statement->execute();
+		$account = $statement->fetchAll(PDO::FETCH_ASSOC);
+		if (count($account) == 0)
+			return false;
+		$userId = $account[0]['id'];
+		$statement = $this->DB->prepare('INSERT INTO games (user_id, game_result, game_type, opponent) values (:userId, :result, :type, :opp);');
+		$statement->bindParam('userId', $userId);
+		$statement->bindParam('result', $result);
+		$statement->bindParam('type', $type);
+		$statement->bindParam('opp', $opponent);
+		$statement->execute();
+		return true;
 	}
 	
-	public function getGameData($userId) {
+	public function getGameData($username) {
+		$username = htmlspecialchars($username);
+		$statement = $this->DB->prepare('SELECT games.game_result, games.game_type FROM games JOIN users ON games.user_id = users.id WHERE users.username = :user;');
+		$statement->bindParam('user', $username);
+		$statement->execute();
+		$records = $statement->fetchAll(PDO::FETCH_ASSOC);
+		$stats = array('count' => 0, 'fav' => "", 'win' => 0, 'loss' => 0, 'tie' => 0);
+		$stats['count'] = count($records);
+		$ultGames = 0;
+		$normGames = 0;
+		for ($i = 0; $i < $stats['count']; $i++) {
+			if ($records[$i]['game_type'] == 'u')
+				$ultGames++;
+			else //'n'
+				$normGames++;
+			//
+			if ($records[$i]['game_result'] == 'w') $stats['win']++;
+			if ($records[$i]['game_result'] == 'l') $stats['loss']++;
+			if ($records[$i]['game_result'] == 't') $stats['tie']++;
+		}
+		if ($ultGames > $normGames)
+			$stats['fav'] = "Ultimate";
+		else if ($ultGames < $normGames)
+			$stats['fav'] = "Normal";
+		else
+			$stats['fav'] = "Both!";
 		
+		return $stats;
 	}
 	
 }

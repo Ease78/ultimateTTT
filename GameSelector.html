@@ -24,7 +24,7 @@
               </div>
             </div>
             <br/>
-         <button style="margin-left:65px;" onclick="calculateStats()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Statistics</button>
+         <button style="margin-left:65px;" onclick="displayStats()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Statistics</button>
             
             <br/>
   		<button style="margin-left:65px;" onclick="logoutAccount()" type='submit' name='btn_logout' class='col  s6 btn btn-small white black-text  waves-effect z-depth-1 y-depth-1'>Logout</button>
@@ -33,7 +33,36 @@
        </div>
       </center>
       </main>
-      
+    
+	<script type="text/javascript" src="./ajaxScript.js"></script>
+	<script>
+		currentUser(function(response) {if (!JSON.parse(response).exists) window.location = "./Login.html";});
+		
+		function logoutAccount() {
+    		logout(function (response) {
+				//console.log(response);
+				window.location = "./Login.html";
+			});
+		}
+		
+		function displayStats() {
+			getStats(function(response) {
+				response = JSON.parse(response);
+				if (!response.success)
+					alert("Error accessing statistics");
+				else {
+					var str = "Games Played: " + response.count;
+					str += "\nFavorite Version: " + response.fav;
+					str += "\nWins: " + response.win;
+					str += "\nLosses: " + response.loss;
+					str += "\nTies: " + response.tie;
+					alert(str);
+				}
+			});
+		}
+		
+	</script>
+	
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
  
