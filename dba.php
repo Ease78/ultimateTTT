@@ -3,11 +3,10 @@
 class DBAdapter {
 	
 	private $DB;
-	private const $DB_NAME = 'finalproject';
 	
 	
 	public function __construct() {
-		$db = 'mysql:dbname='.$DB_NAME.';charset=utf8;host=127.0.0.1';
+		$db = "mysql:dbname=finalproject;charset=utf8;host=127.0.0.1";
 		$user = 'root';
 		$pass = '';
 		try {
@@ -30,7 +29,8 @@ class DBAdapter {
 			return false;
 		$statement = $this->DB->prepare("INSERT INTO users (username, password) values (:username, :password);");
 		$statement->bindParam("username", $username);
-		$statement->bindParam("password", password_hash($password, PASSWORD_DEFAULT));
+		$hashedPass = password_hash($password, PASSWORD_DEFAULT);
+		$statement->bindParam("password", $hashedPass);
 		$statement->execute();
 		return true;
 	}
@@ -44,9 +44,9 @@ class DBAdapter {
 		$account = $statement->fetchAll(PDO::FETCH_ASSOC);
 		if (count($account) == 0)
 			return [false, -1];
-		if (!password_verify($password, $account['password']))
+		if (!password_verify($password, $account[0]['password']))
 			return [false, -1];
-		return [true, $account['id']];
+		return [true, $account[0]['id']];
 	}
 	
 	public function changePassword($username, $oldPass, $newPass) {

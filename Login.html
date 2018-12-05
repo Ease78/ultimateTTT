@@ -69,11 +69,15 @@ function resetInput(){
    
 
     function sendUserCredntials(){
-    		ajaxScript.login(userVar.value, passVar.value);
+    		ajaxScript.login(userVar.value, passVar.value, function (response) {
+				//put return dependent code here
+			});
     	}
     	
     function registerUserCredntials(){
-    		ajaxScript.register(userVar.value, passVar.value);
+    		ajaxScript.register(userVar.value, passVar.value, function (response) {
+				//put return dependent code here
+			});
     	}
     </script>
 	</div>
